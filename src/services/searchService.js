@@ -36,7 +36,7 @@ export function iTunesSearch(searchQuery) {
 export function spotifySearch(searchQuery) {
 	let returnArray = [];
 	if (!!searchQuery) {
-		let searchUrl = `https://api.spotify.com/v1/search?q=artist:${searchQuery}&type=album`
+		let searchUrl = `https://api.spotify.com/v1/search?q=artist:${searchQuery}&type=album&limit=50`
 		return fetch(searchUrl)
 			.then(parseJSON)
 	  	.then((response) => {
