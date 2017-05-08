@@ -3,16 +3,19 @@ import musicSearchReducer from './reducers/musicSearchReducer';
 import thunk from 'redux-thunk';
 
 export default function configureStore(initialState = {}) {
-  const middleware = applyMiddleware( thunk );
+  const enhancers = [
+    applyMiddleware(thunk),
+  ];
 
-  if (process.env.NODE_ENV === 'test') {
-    const storeTest = createStore(musicSearchReducer);
-    return storeTest;
-  } else {
-    const store = createStore(
-      musicSearchReducer,
-      compose(middleware, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-    );
-    return store;
-  }
+  // If Redux DevTools Extension is installed use it, otherwise use Redux compose
+  const composeEnhancers = typeof window === 'object' &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+      window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
+
+  const store = createStore(
+    musicSearchReducer,
+    composeEnhancers(...enhancers)
+  );
+
+  return store;
 };
